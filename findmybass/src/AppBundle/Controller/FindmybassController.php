@@ -9,8 +9,11 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Bass;
+use AppBundle\Form\Type\BassType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class FindmybassController extends Controller
@@ -31,11 +34,30 @@ class FindmybassController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/addbass", name="addbass")
      */
-    public function addbassAction(){
-        return $this->render("findmybass/addbass.html.twig");
+    public function addbassAction(Request $request){
+        $form = $this->createForm(BassType::class);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+//            TODO check db for make name and model name and return objects; if not, create new makes/models
+//            TODO add objects IDs to the Bass object created by the form
+//            TODO add create/modify date and other details to bass object
+//            TODO persist bass object to database and redirect to details page
+//            $em = $this->getDoctrine()->getManager();
+//            $bass = $form->getData();
+
+            dump($form->getData());
+            exit();
+
+        }
+        return $this->render("findmybass/addbass.html.twig", [
+            "form" => $form->createView()
+        ]);
     }
 
     /**

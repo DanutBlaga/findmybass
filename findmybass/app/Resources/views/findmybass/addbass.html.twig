@@ -5,7 +5,13 @@
 {% endblock %}
 
 {% block body %}
-   Add Bass page
+    <h2>Add a new bass</h2>
+
+    <hr />
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block addbass_active %}active{% endblock %}
