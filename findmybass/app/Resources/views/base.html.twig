@@ -27,17 +27,17 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+            <li class="nav-item {% block home_active %} {% endblock %}">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% block addbass_active %} {% endblock %}">
                 <a class="nav-link" href="/addbass">Add Bass</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">All Basses</a>
+            <li class="nav-item {% block allbasses_active %} {% endblock %}">
+                <a class="nav-link" href="/allbasses">All Basses</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Profile</a>
+            <li class="nav-item {% block userprofile_active %} {% endblock %}">
+                <a class="nav-link" href="/userprofile">Profile</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
