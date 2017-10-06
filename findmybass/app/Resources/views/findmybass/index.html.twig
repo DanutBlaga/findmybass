@@ -5,7 +5,32 @@
 {% endblock %}
 
 {% block body %}
-    ceva aici
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Short Description</th>
+            <th>Owner Username</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bass in basses %}
+        <tr>
+            <td>{{ bass.make.name }}</td>
+            <td>{{ bass.model.name }}</td>
+            <td>{{ bass.description }}</td>
+            <td>AMightyDonut</td>
+            <td>
+                <a href="/bass/details/{{ bass.id }}" class="btn btn-success">View Bass</a>
+                <a href="/bass/edit/{{ bass.id }}" class="btn btn-default">Edit Bass Info</a>
+                <a href="/bass/delete/{{ bass.id }}" class="btn btn-danger">Delete Bass</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block home_active %}active{% endblock %}

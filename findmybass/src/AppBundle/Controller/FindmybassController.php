@@ -20,7 +20,14 @@ class FindmybassController extends Controller
      * @Route("/", name="homepage")
      */
     public function indexAction(){
-        return $this->render("findmybass/index.html.twig");
+
+        $basses = $this->getDoctrine()
+                        ->getRepository("AppBundle:Bass")
+                        ->findAll();
+
+        return $this->render("findmybass/index.html.twig", [
+            "basses" => $basses
+        ]);
     }
 
     /**
