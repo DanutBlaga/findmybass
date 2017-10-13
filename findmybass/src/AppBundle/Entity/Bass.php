@@ -12,9 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Bass
 {
-    /*
-     * TODO create Users db and FK to User ID
-     */
+
     /**
      * @var int
      *
@@ -93,6 +91,21 @@ class Bass
      * @ORM\Column(name="EditDate", type="datetime")
      */
     private $editDate;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="UserID", type="integer", nullable=false)
+     */
+    private $userID;
+
+    /**
+     * @var Users
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Users", inversedBy="basses")
+     * @ORM\JoinColumn(name="UserID", referencedColumnName="id")
+     */
+    private $userEntity;
 
     /**
      * @var Make
@@ -414,6 +427,38 @@ class Bass
     public function setMakeName($makeName)
     {
         $this->makeName = $makeName;
+    }
+
+    /**
+     * @return Users
+     */
+    public function getUserEntity()
+    {
+        return $this->userEntity;
+    }
+
+    /**
+     * @param Users $userEntity
+     */
+    public function setUserEntity($userEntity)
+    {
+        $this->userEntity = $userEntity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserID()
+    {
+        return $this->userID;
+    }
+
+    /**
+     * @param int $userID
+     */
+    public function setUserID($userID)
+    {
+        $this->userID = $userID;
     }
 }
 

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,6 +57,16 @@ class Users
      */
     private $creationtime;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bass", mappedBy="userEntity")
+     */
+    private $basses;
+
+    public function __construct(){
+        $this->basses = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -185,6 +196,22 @@ class Users
     public function getCreationtime()
     {
         return $this->creationtime;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getBasses()
+    {
+        return $this->basses;
+    }
+
+    /**
+     * @param ArrayCollection $basses
+     */
+    public function setBasses($basses)
+    {
+        $this->basses = $basses;
     }
 }
 
