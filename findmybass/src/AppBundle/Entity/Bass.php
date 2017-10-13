@@ -97,18 +97,22 @@ class Bass
     /**
      * @var Make
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Make")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Make")
      * @ORM\JoinColumn(name="MakeID", referencedColumnName="id")
      */
     private $make;
 
+
+
     /**
      * @var Model
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Model")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Model")
      * @ORM\JoinColumn(name="ModelID", referencedColumnName="id")
      */
     private $model;
+
+
 
     private $makeName;
     private $modelName;
