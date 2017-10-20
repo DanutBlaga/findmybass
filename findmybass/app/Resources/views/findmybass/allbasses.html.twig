@@ -5,7 +5,30 @@
 {% endblock %}
 
 {% block body %}
-    All Basses page
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Description</th>
+            <th>Owner</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bass in basses %}
+            <tr>
+                <td>{{ bass.make.name }}</td>
+                <td>{{ bass.model.name }}</td>
+                <td>{{ bass.description }}</td>
+                <td>{{ bass.userEntity.username }}</td>
+                <td>
+                    <a href="/bass/details/"{{ bass.id }} class="btn btn-success">View Bass</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block allbasses_active %}active{% endblock %}

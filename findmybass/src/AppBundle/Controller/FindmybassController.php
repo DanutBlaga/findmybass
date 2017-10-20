@@ -65,7 +65,13 @@ class FindmybassController extends Controller
      * @Route("/allbasses", name="allbasses")
      */
     public function allbassesAction(){
-        return $this->render("findmybass/allbasses.html.twig");
+        $basses = $this->getDoctrine()
+                       ->getRepository("AppBundle:Bass")
+                       ->findAll();
+
+        return $this->render("findmybass/allbasses.html.twig", [
+            "basses" => $basses
+        ]);
     }
 
     /**
