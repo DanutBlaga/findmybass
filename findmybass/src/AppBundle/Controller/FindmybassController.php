@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bass;
 use AppBundle\Form\Type\BassType;
+use AppBundle\Form\Type\RegisterType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,5 +81,26 @@ class FindmybassController extends Controller
      */
     public function profileAction(){
         return $this->render("findmybass/userprofile.html.twig");
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/userregister", name="userregister")
+     */
+    public function registerAction(Request $request){
+        $form = $this->createForm(RegisterType::class);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+
+            dump($form->getData());
+            exit();
+        }
+        return $this->render("findmybass/userregister.html.twig", [
+            "form" => $form->createView()
+        ]);
     }
 }
