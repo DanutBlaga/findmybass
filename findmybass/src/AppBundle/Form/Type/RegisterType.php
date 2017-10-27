@@ -11,6 +11,7 @@ namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\Users;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -36,10 +37,15 @@ class RegisterType extends AbstractType
                 'second_options' => ['label' => 'Repeat Password', 'attr' => ['class' => 'form-control', 'style' => 'margin-bottom:5px']]
             ])
             ->add('BirthDate', DateType::class, [
+                'widget' => 'choice',
+                'years' => range(date('Y'), date('Y')-70),
                 'attr' => ['class' => 'form-control', 'style' => 'margin-bottom:5px']
             ])
             ->add('Email', EmailType::class, [
                 'attr' => ['class' => 'form-control', 'style' => 'margin-bottom:5px']
+            ])
+            ->add('Submit', SubmitType::class, [
+                'label' => 'Register', 'attr' => ['class' => 'btn btn-success']
             ]);
     }
 
