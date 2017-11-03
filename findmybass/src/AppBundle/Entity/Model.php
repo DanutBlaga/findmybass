@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Utils\StringNormalizer;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="model")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Model
 {
@@ -45,6 +47,13 @@ class Model
     /**
      * @var string
      *
+     * @ORM\Column(name="normalized_name", type="string", length=255)
+     */
+    private $normalizedName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="PicturePath", type="string", length=255, nullable=true)
      */
     private $picturePath;
@@ -56,6 +65,15 @@ class Model
      * @ORM\JoinColumn(name="MakeID", referencedColumnName="id")
      */
     private $make;
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function ensureNormalizedName(){
+
+        $this->normalizedName = StringNormalizer::normalizeName($this->name);
+    }
 
 
     /**
@@ -170,6 +188,28 @@ class Model
     public function getMake()
     {
         return $this->make;
+    }
+
+    /**
+     * @param Make $makeEntity
+     * @return $this
+     */
+    public function setMake($makeEntity) {
+        $this->make = $makeEntity;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNormalizedName()
+    {
+        if ($this->normalizedName == null) {
+           $this->ensureNormalizedName();
+        }
+
+        return $this->normalizedName;
     }
 }
 

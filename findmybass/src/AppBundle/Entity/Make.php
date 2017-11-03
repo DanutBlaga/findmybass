@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Utils\StringNormalizer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="make")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MakeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Make
 {
@@ -28,6 +30,13 @@ class Make
      * @ORM\Column(name="Name", type="string", length=255, unique=true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="normalized_name", type="string", length=255, unique=true)
+     */
+    private $normalizedName;
 
     /**
      * @var string
@@ -52,6 +61,14 @@ class Make
 
     public function __construct(){
         $this->models = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function ensureNormalizedName() {
+        $this->normalizedName = StringNormalizer::normalizeName($this->name);
     }
 
 
@@ -143,6 +160,18 @@ class Make
     public function getModels()
     {
         return $this->models;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNormalizedName()
+    {
+        if ($this->normalizedName == null) {
+            $this->ensureNormalizedName();
+        }
+
+        return $this->normalizedName;
     }
 }
 

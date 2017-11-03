@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="bass")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BassRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Bass
 {
@@ -129,6 +130,17 @@ class Bass
 
     private $makeName;
     private $modelName;
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateTimestamps() {
+        $this->editDate = new \DateTime('now');
+        if($this->creationDate == null) {
+            $this->creationDate = new \DateTime('now');
+        }
+    }
 
 
     /**
@@ -459,6 +471,22 @@ class Bass
     public function setUserID($userID)
     {
         $this->userID = $userID;
+    }
+
+    /**
+     * @param Make $make
+     */
+    public function setMake($make)
+    {
+        $this->make = $make;
+    }
+
+    /**
+     * @param Model $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
     }
 }
 
