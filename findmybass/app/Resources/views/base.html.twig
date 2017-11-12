@@ -43,6 +43,17 @@
                 <a class="nav-link" href="/userregister">Register</a>
             </li>
         </ul>
+        <ul class="navbar-nav navbar-right">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-danger" href="{{ logout_path() }}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-success" href="{{ path('login') }}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

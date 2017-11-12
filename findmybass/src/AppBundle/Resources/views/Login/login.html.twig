@@ -12,7 +12,7 @@
     <div class="panel-body">
         {% if errors %}
             <div class="alert alert-danger">
-                {{ error.messageKey }}
+                {{ errors.messageKey }}
             </div>
         {% endif %}
         <form action="{{ path('login') }}" method="post">
