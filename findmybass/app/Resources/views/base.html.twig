@@ -39,9 +39,11 @@
             <li class="nav-item {% block userprofile_active %} {% endblock %}">
                 <a class="nav-link" href="/userprofile">Profile</a>
             </li>
-            <li class="nav-item {% block userregister_active%} {% endblock %}">
-                <a class="nav-link" href="/userregister">Register</a>
-            </li>
+            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item {% block userregister_active%} {% endblock %}">
+                    <a class="nav-link" href="/userregister">Register</a>
+                </li>
+            {% endif %}
         </ul>
         <ul class="navbar-nav navbar-right">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
