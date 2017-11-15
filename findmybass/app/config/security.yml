@@ -28,6 +28,13 @@ security:
             logout:
                 path: /logout
                 target: /
+
+    access_control:
+        - { path: ^/addbass, roles: IS_AUTHENTICATED_FULLY }
+
+
+
+
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
