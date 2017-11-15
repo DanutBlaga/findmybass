@@ -36,14 +36,14 @@
                 </li>
             {% endif %}
             <li class="nav-item {% block allbasses_active %} {% endblock %}">
-                <a class="nav-link" href="/allbasses">All Basses</a>
+                <a class="nav-link" href="{{ path('allbasses') }}">All Basses</a>
             </li>
             <li class="nav-item {% block userprofile_active %} {% endblock %}">
-                <a class="nav-link" href="/userprofile">Profile</a>
+                <a class="nav-link" href="{{ path('userprofile') }}">Profile</a>
             </li>
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item {% block userregister_active%} {% endblock %}">
-                    <a class="nav-link" href="/userregister">Register</a>
+                    <a class="nav-link" href="{{ path('userregister') }}">Register</a>
                 </li>
             {% endif %}
         </ul>

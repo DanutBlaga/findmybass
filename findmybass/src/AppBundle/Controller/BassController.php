@@ -2,8 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
+use AppBundle\Entity\Bass;
 use AppBundle\Entity\Make;
 use AppBundle\Entity\Model;
+use AppBundle\Form\Type\BassEditType;
 use AppBundle\Form\Type\BassType;
 use AppBundle\Utils\StringNormalizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,21 +20,77 @@ class BassController extends Controller {
      * @Route("/bass/details/{id}", name="bassdetails")
      */
     public function bassDetailsAction($id) {
+        $bass = $this->getDoctrine()
+            ->getRepository('AppBundle:Bass')->
+            find($id);
 
+        return $this->render('findmybass/details.html.twig', [
+           'bass' => $bass
+        ]);
     }
 
     /**
      * @Route("/bass/edit/{id}", name="bassedit")
      */
-    public function bassEditAction($id) {
+    public function bassEditAction($id, Request $request) {
 
+        $bass = $this->getDoctrine()
+            ->getRepository('AppBundle:Bass')
+            ->find($id);
+
+        $bass->setYear($bass->getYear());
+        $bass->setManufacturingPlace($bass->getManufacturingPlace());
+        $bass->setCurrentLocation($bass->getCurrentLocation());
+        $bass->setDescription($bass->getDescription());
+
+        $form = $this->createForm(BassEditType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $year = $form['Year']->getData();
+            $currentLocation = $form['CurrentLocation']->getData();
+            $manufacturingPlace = $form['manufacturingPlace']->getData();
+            $description = $form['Description']->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $bass = $em->getRepository('AppBundle:Bass')->find($id);
+
+            $bass->setYear($year);
+            $bass->setCurrentLocation($currentLocation);
+            $bass->setManufacturingPlace($manufacturingPlace);
+            $bass->setDescription($description);
+
+            $em->flush();
+
+            return $this->redirectToRoute("allbasses");
+        }
+
+        return $this->render('findmybass/edit.html.twig',[
+            'form' => $form->createView(),
+            'bass' => $bass
+        ]);
     }
 
     /**
      * @Route("/bass/delete/{id}", name="bassdelete")
      */
     public function bassDeleteAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $bass = $em->getRepository('AppBundle:Bass')->find($id);
 
+        $em->remove($bass);
+        $em->flush();
+
+        $this->addFlash(
+            'notice',
+            'Bass deleted'
+        );
+
+        return $this->redirectToRoute('allbasses');
+
+        //return $this->render('findmybass/delete.html.twig');
     }
 
     /**

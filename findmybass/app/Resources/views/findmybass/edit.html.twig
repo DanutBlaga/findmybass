@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Edit Bass: {{ bass.year }} {{ bass.make.name }} {{ bass.model.name }}</h2>
+
+    <hr />
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a class="btn btn-default" href="/">Back to Main Page</a>
+    <hr>
+    <h2 class="page-header">
+        {{ bass.year }}
+        {{ bass.make.name }}
+        {{ bass.model.name }}
+    </h2>
+
+    <ul class="list-group">
+        <li class="list-group-item">Manufacturing Location: {{ bass.manufacturingPlace }}</li>
+        <li class="list-group-item">Year of Manufacturing: {{ bass.year }}</li>
+        <li class="list-group-item">Current Location: {{ bass.currentLocation }}</li>
+    </ul>
+    <hr>
+    <p>
+        {{ bass.description }}
+    </p>
+{% endblock %}
