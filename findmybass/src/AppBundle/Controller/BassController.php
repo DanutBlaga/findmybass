@@ -6,11 +6,14 @@ use AppBundle\AppBundle;
 use AppBundle\Entity\Bass;
 use AppBundle\Entity\Make;
 use AppBundle\Entity\Model;
+use AppBundle\Entity\Users;
 use AppBundle\Form\Type\BassEditType;
 use AppBundle\Form\Type\BassType;
 use AppBundle\Utils\StringNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -154,5 +157,74 @@ class BassController extends Controller {
         return $this->render("findmybass/addbass.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/bass/thumbsUp/{id}", name="bassthumbsup")
+     * @Method({"POST"})
+     * @param Request $request
+     * @return string
+     */
+    public function thumbsUpAction(Request $request, $id) {
+
+        $user = $this->getUser();
+
+        if ($user instanceof Users) {
+
+
+            $em = $this->getDoctrine()->getManager();
+            $bass = $em->getRepository('AppBundle:Bass')->find($id);
+            $rating = $bass->getRating();
+            $rating+=1;
+
+            $bass->setRating($rating);
+            $em->flush();
+
+            $array = [
+                "error" => 0,
+                "newRating" => $rating
+            ];
+        }
+        else {
+            $array = [
+                "error" => 1,
+                "errorMessage" => "You must be logged in to give a thumbsUp."
+            ];
+        }
+        return new JsonResponse($array);
+    }
+
+    /**
+     * @Route("/bass/thumbsDown/{id}", name="bassthumbsdown")
+     * @Method({"POST"})
+     * @param Request $request
+     * @return string
+     */
+    public function thumbsDownAction(Request $request, $id) {
+
+        $user = $this->getUser();
+
+        if ($user instanceof Users) {
+
+            $em = $this->getDoctrine()->getManager();
+            $bass = $em->getRepository('AppBundle:Bass')->find($id);
+            $rating = $bass->getRating();
+            $rating-=1;
+
+            $bass->setRating($rating);
+            $em->flush();
+
+            $array = [
+                "error" => 0,
+                "newRating" => $rating
+            ];
+        }
+        else {
+            $array = [
+                "error" => 1,
+                "errorMessage" => "You need to be logged in to perform this action."
+            ];
+        }
+        return new JsonResponse($array);
     }
 }
