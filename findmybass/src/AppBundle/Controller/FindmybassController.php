@@ -46,10 +46,30 @@ class FindmybassController extends Controller
      * @Route("/allbasses", name="allbasses")
      */
     public function allbassesAction(){
+        $em = $this->getDoctrine()->getManager();
         $basses = $this->getDoctrine()
                        ->getRepository("AppBundle:Bass")
                        ->findAll();
 
+        $user = $this->getUser();
+
+        if ($user instanceof Users) {
+            foreach ($basses as $bass) {
+                $userRating = $em->getRepository('AppBundle:UserRatings')->findOneBy([
+                    'userID' => $user->getId(),
+                    'bassID' => $bass->getId()
+                ]);
+
+                if (null !== $userRating) {
+                    if ($userRating->getIsThumbsUp()) {
+                        $bass->setIsThumbsUp();
+                    }
+                    else {
+                        $bass->setIsThumbsDown();
+                    }
+                }
+            }
+        }
         return $this->render("findmybass/allbasses.html.twig", [
             "basses" => $basses
         ]);

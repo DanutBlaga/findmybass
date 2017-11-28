@@ -6,6 +6,7 @@ use AppBundle\AppBundle;
 use AppBundle\Entity\Bass;
 use AppBundle\Entity\Make;
 use AppBundle\Entity\Model;
+use AppBundle\Entity\UserRatings;
 use AppBundle\Entity\Users;
 use AppBundle\Form\Type\BassEditType;
 use AppBundle\Form\Type\BassType;
@@ -173,17 +174,41 @@ class BassController extends Controller {
 
 
             $em = $this->getDoctrine()->getManager();
+
             $bass = $em->getRepository('AppBundle:Bass')->find($id);
-            $rating = $bass->getRating();
-            $rating+=1;
+            $userRating = $em->getRepository('AppBundle:UserRatings')->findOneBy([
+                'userID' => $user->getId(),
+                'bassID' => $bass->getId()
+            ]);
+            if (null == $userRating) {
+                $rating = $bass->getRating();
+                $rating += 1;
 
-            $bass->setRating($rating);
-            $em->flush();
+                $bass->setRating($rating);
 
-            $array = [
-                "error" => 0,
-                "newRating" => $rating
-            ];
+                // TODO Create constructors for userRating, one empty, one w/ bass 'n user
+                $userRating = new UserRatings();
+                $userRating->setBass($bass);
+                $userRating->setBassID($bass->getId());
+                $userRating->setUser($user);
+                $userRating->setUserID($user->getId());
+                $userRating->setIsThumbsUp(true);
+
+                $em->persist($userRating);
+                $em->flush();
+
+                // TODO create static util function that generates success array
+                $array = [
+                    "error" => 0,
+                    "newRating" => $rating
+                ];
+            }
+            else {
+                $array = [
+                    "error" => 1,
+                    "errorMessage" => "You have already given a thumbsUp."
+                ];
+            }
         }
         else {
             $array = [

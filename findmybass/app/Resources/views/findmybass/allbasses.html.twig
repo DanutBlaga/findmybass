@@ -12,10 +12,17 @@
          .fa:hover {
              color: yellow;
          }
+
+         .hasThumbs {
+             color: yellow;
+         }
      </style>
  {% endblock %}
 
 {% block body %}
+    <div class = "alert alert-danger" id = "errorAlert">
+        {#<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>#}
+    </div>
     <table class="table">
         <thead>
         <tr>
@@ -29,16 +36,28 @@
         </thead>
         <tbody>
         {% for bass in basses %}
+
+            {% if bass.isThumbsUp or bass.isThumbsDown %}
+                {% if bass.isThumbsUp %}
+                    {% set isThumbsUp="hasThumbs" %}
+                {% else %}
+                    {% set isThumbsDown="hasThumbs" %}
+                {% endif %}
+            {% else %}
+                {% set isThumbsDown="" %}
+                {% set isThumbsUp="" %}
+            {% endif %}
+
             <tr>
                 <td>{{ bass.make.name }}</td>
                 <td>{{ bass.model.name }}</td>
                 <td>{{ bass.description }}</td>
                 <td>
-                    <i class="fa fa-thumbs-up" bassId = "{{ bass.id }}"></i>
+                    <i class="fa fa-thumbs-up {{ isThumbsUp }}" bassId = "{{ bass.id }}"></i>
                     <span class="bassRating">
                         {{ bass.rating }}
                     </span>
-                    <i class="fa fa-thumbs-down" bassId = "{{ bass.id }}"></i>
+                    <i class="fa fa-thumbs-down {{ isThumbsDown }}" bassId = "{{ bass.id }}"></i>
                 </td>
                 <td>{{ bass.userEntity.username }}</td>
                 <td>
@@ -71,7 +90,7 @@
             $.post(url, null, callbackFunction)
                 .fail(function (err, status) {
                     console.error("Ajax request to " + url + " has failed with status: " + status +
-                        " and error: " + JSON.stringify(err));
+                        " and error: " + err);
                 });
         };
 
@@ -79,9 +98,17 @@
             $("i.fa-thumbs-up").click(function () {
 
                 var bassRatingSpan = $(this).closest('td').find('span.bassRating');
+                var thumbsUpIcon = $(this);
 
                 postFunction(true, $(this), function (data, status) {
-                  bassRatingSpan.text(data['newRating']);
+                    if (data['error'] === 0) {
+                        bassRatingSpan.text(data['newRating']);
+                        thumbsUpIcon.addClass("hasThumbs");
+                    }
+                    else {
+                        $("div#errorAlert").text(data['errorMessage']);
+                        //alert("Error message: " + data['errorMessage']);
+                    }
                 })
             });
 

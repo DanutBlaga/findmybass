@@ -131,6 +131,9 @@ class Bass
     private $makeName;
     private $modelName;
 
+    private $isThumbsUp = false;
+    private $isThumbsDown = false;
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -487,6 +490,44 @@ class Bass
     public function setModel($model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isThumbsUp()
+    {
+        return $this->isThumbsUp;
+    }
+
+    /**
+     * @param bool $isThumbsUp
+     */
+    public function setIsThumbsUp()
+    {
+        if (!$this->isThumbsUp && !$this->isThumbsDown)
+            $this->isThumbsUp = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isThumbsDown()
+    {
+        return $this->isThumbsDown;
+    }
+
+    /**
+     * @param bool $isThumbsDown
+     */
+    public function setIsThumbsDown()
+    {
+        if (!$this->isThumbsUp && !$this->isThumbsDown)
+            $this->isThumbsDown = true;
+    }
+
+    public function hasVoted() {
+        return $this->isThumbsUp() || $this->isThumbsDown();
     }
 }
 
