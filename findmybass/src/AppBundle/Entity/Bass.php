@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Entity\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Bass
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="bass")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BassRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable()
  */
 class Bass
 {
@@ -64,6 +67,14 @@ class Bass
      * @ORM\Column(name="PicturePath", type="string", length=255, nullable=true)
      */
     private $picturePath;
+
+    /**
+     * @Vich\UploadableField(mapping="bass_image", fileNameProperty="picturePath")
+     *
+     * @var File
+     */
+
+    private $pictureFile;
 
     /**
      * @var string
@@ -528,6 +539,25 @@ class Bass
 
     public function hasVoted() {
         return $this->isThumbsUp() || $this->isThumbsDown();
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $pictureFile
+     * @return Bass
+     */
+    public function setPictureFile($pictureFile = null)
+    {
+        $this->pictureFile = $pictureFile;
+
+        return $this;
     }
 }
 

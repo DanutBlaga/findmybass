@@ -5,6 +5,7 @@ namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\Bass;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -29,6 +30,8 @@ class BassType extends AbstractType
                 'label' => 'Current Location', 'attr' => ['class' => 'form-control', 'style' => 'margin-bottom:5px']])
             ->add('Description', TextareaType::class, [
                 'attr' => ['class' => 'form-control', 'style' => 'margin-bottom:5px']])
+            ->add('PictureFile', FileType::class, [
+                'label' => 'Upload Image'])
             ->add('Submit', SubmitType::class, [
                 'label' => 'Add Bass', 'attr' => ['class' => 'btn btn-success']])
         ;
