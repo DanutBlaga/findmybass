@@ -23,6 +23,40 @@
     <div class = "alert alert-danger" id = "errorAlert">
         {#<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>#}
     </div>
+
+    <div class = "bass-filter">
+        <div class = "row">
+            <div class = "dropdown column-md-6" id="make">
+                <button class = "btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                    {{ makeDropdownText }}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    {% for make in makes %}
+                        <li><a href="{{ path('allbasses', {'makeParam': make.id}) }}">
+                                {{ make.name }}
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class = "dropdown column-md-6" id="model">
+                <button class = "btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                    {{ modelDropdownText }}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    {% for model in models %}
+                        <li><a href="{{ path('allbasses', {'makeParam': model.make.id, 'modelParam': model.id}) }}">
+                                {{ model.name }}
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
     <table class="table">
         <thead>
         <tr>
@@ -36,6 +70,8 @@
         </thead>
         <tbody>
         {% for bass in basses %}
+            {% set isThumbsDown="" %}
+            {% set isThumbsUp="" %}
 
             {% if bass.isThumbsUp or bass.isThumbsDown %}
                 {% if bass.isThumbsUp %}
@@ -43,9 +79,6 @@
                 {% else %}
                     {% set isThumbsDown="hasThumbs" %}
                 {% endif %}
-            {% else %}
-                {% set isThumbsDown="" %}
-                {% set isThumbsUp="" %}
             {% endif %}
 
             <tr>
@@ -64,7 +97,7 @@
                     <a href="/bass/details/{{ bass.id }}" class="btn btn-success">View Bass</a>
                 </td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
 {% endblock %}

@@ -43,16 +43,49 @@ class FindmybassController extends Controller
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/allbasses", name="allbasses")
+     * @Route("/allbasses/{makeParam}/{modelParam}", name="allbasses", defaults={"makeParam" = 0, "modelParam" = 0})
      */
-    public function allbassesAction(){
+    public function allbassesAction($makeParam, $modelParam){
+
         $em = $this->getDoctrine()->getManager();
-        $basses = $this->getDoctrine()
-                       ->getRepository("AppBundle:Bass")
-                       ->findAll();
+        $makeDropdownText = "Select Make";
+        $modelDropdownText = "Select Model";
+        $allModelsOfMake = [];
 
+        if (0 === $makeParam) {
+            //there's no make selected in the dropdown filter; select all basses
+            $basses = $em
+                ->getRepository("AppBundle:Bass")
+                ->findAll();
+
+        }
+        else {
+            $makeDropdownText = $em->getRepository('AppBundle:Make')->find($makeParam)->getName();
+            $allModelsOfMake = $em->getRepository('AppBundle:Model')->findBy(
+                ['makeID' => $makeParam]
+            );
+
+            if (0 === $modelParam) {
+                $basses = $em->getRepository('AppBundle:Bass')->findBy(
+                  ['makeID' => $makeParam]
+                );
+            }
+            else {
+                $modelDropdownText = $em->getRepository('AppBundle:Model')->find($modelParam)->getName();
+                $basses = $em->getRepository('AppBundle:Bass')->findBy(
+                  [
+                      'makeID' => $makeParam,
+                      'modelID' => $modelParam
+                  ]
+                );
+            }
+        }
+
+
+
+
+        //TODO Move if to separate function
         $user = $this->getUser();
-
         if ($user instanceof Users) {
             foreach ($basses as $bass) {
                 $userRating = $em->getRepository('AppBundle:UserRatings')->findOneBy([
@@ -70,8 +103,15 @@ class FindmybassController extends Controller
                 }
             }
         }
+
+        $makes = $em->getRepository('AppBundle:Make')->findAll();
+
         return $this->render("findmybass/allbasses.html.twig", [
-            "basses" => $basses
+            "basses" => $basses,
+            "makes" => $makes,
+            "models" => $allModelsOfMake,
+            "makeDropdownText" => $makeDropdownText,
+            "modelDropdownText" => $modelDropdownText
         ]);
     }
 
