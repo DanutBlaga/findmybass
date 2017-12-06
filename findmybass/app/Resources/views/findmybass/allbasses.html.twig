@@ -148,9 +148,16 @@
             $("i.fa-thumbs-down").click(function () {
 
                 var bassRatingSpan = $(this).closest('td').find('span.bassRating');
+                var thumbsDownIcon = $(this);
 
                 postFunction(false, $(this), function (data, status) {
-                    bassRatingSpan.text(data['newRating']);
+                    if (data['error'] === 0) {
+                        bassRatingSpan.text(data['newRating']);
+                        thumbsDownIcon.addClass("hasThumbs");
+                    }
+                    else {
+                        $("div#errorAlert").text(data['errorMessage']);
+                    }
                 })
             });
         });

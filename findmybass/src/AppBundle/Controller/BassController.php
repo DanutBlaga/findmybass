@@ -176,6 +176,7 @@ class BassController extends Controller {
             $em = $this->getDoctrine()->getManager();
 
             $bass = $em->getRepository('AppBundle:Bass')->find($id);
+
             $userRating = $em->getRepository('AppBundle:UserRatings')->findOneBy([
                 'userID' => $user->getId(),
                 'bassID' => $bass->getId()
@@ -232,17 +233,41 @@ class BassController extends Controller {
         if ($user instanceof Users) {
 
             $em = $this->getDoctrine()->getManager();
+
             $bass = $em->getRepository('AppBundle:Bass')->find($id);
-            $rating = $bass->getRating();
-            $rating-=1;
 
-            $bass->setRating($rating);
-            $em->flush();
+            $userRating = $em->getRepository('AppBundle:UserRatings')->findOneBy([
+                'userID' => $user->getId(),
+                'bassID' => $bass->getId()
+            ]);
 
-            $array = [
-                "error" => 0,
-                "newRating" => $rating
-            ];
+            if (null == $userRating) {
+                $rating = $bass->getRating();
+                $rating-=1;
+
+                $bass->setRating($rating);
+
+                $userRating = new UserRatings();
+                $userRating->setBass($bass);
+                $userRating->setBassID($bass->getId());
+                $userRating->setUser($user);
+                $userRating->setIsThumbsUp(false);
+
+                $em->persist($userRating);
+                $em->flush();
+
+                $array = [
+                    "error" => 0,
+                    "newRating" => $rating
+                ];
+            }
+
+            else {
+                $array = [
+                    "error" => 1,
+                    "errorMessage" => "You have already given a thumbsDown."
+                ];
+            }
         }
         else {
             $array = [

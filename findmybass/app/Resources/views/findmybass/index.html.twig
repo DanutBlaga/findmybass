@@ -24,8 +24,10 @@
             <td>{{ bass.userEntity.username }}</td>
             <td>
                 <a href="/bass/details/{{ bass.id }}" class="btn btn-success">View Bass</a>
-                <a href="/bass/edit/{{ bass.id }}" class="btn btn-default">Edit Bass Info</a>
-                <a href="/bass/delete/{{ bass.id }}" class="btn btn-danger">Delete Bass</a>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a href="/bass/edit/{{ bass.id }}" class="btn btn-default">Edit Bass Info</a>
+                    <a href="/bass/delete/{{ bass.id }}" class="btn btn-danger">Delete Bass</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
