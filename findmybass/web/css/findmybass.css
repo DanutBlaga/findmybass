@@ -1,0 +1,29 @@
+.navbar-brand img {
+    width: 210px;
+}
+
+.navbar-findmybass {
+    background-color: #00ffec14;
+}
+
+a.nav-link {
+    color: black;
+    font-weight: 600;
+}
+
+a.nav-link:hover, a.nav-link.active {
+    color: #b65728;
+}
+
+.loginout {
+    margin-right: 8px;
+    color: #b65728;
+    background-color: transparent;
+    background-image: none;
+    border-color: #b65728;
+}
+
+a.loginout:hover {
+    color:white;
+    background-color: #b65728;
+}

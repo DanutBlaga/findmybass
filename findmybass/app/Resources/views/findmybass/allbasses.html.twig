@@ -8,15 +8,7 @@
  {% block stylesheets %}
      <link rel="stylesheet"
            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-     <style>
-         .fa:hover {
-             color: yellow;
-         }
-
-         .hasThumbs {
-             color: yellow;
-         }
-     </style>
+    <link rel="stylesheet" href="{{ asset('css/allbasses.css') }}">
  {% endblock %}
 
 {% block body %}
@@ -132,11 +124,16 @@
 
                 var bassRatingSpan = $(this).closest('td').find('span.bassRating');
                 var thumbsUpIcon = $(this);
+                var thumbsDownIcon = $("i.fa-thumbs-down");
 
                 postFunction(true, $(this), function (data, status) {
                     if (data['error'] === 0) {
                         bassRatingSpan.text(data['newRating']);
                         thumbsUpIcon.addClass("hasThumbs");
+
+                        if (thumbsDownIcon.hasClass("hasThumbs")) {
+                            thumbsDownIcon.removeClass("hasThumbs");
+                        }
                     }
                     else {
                         $("div#errorAlert").text(data['errorMessage']);
