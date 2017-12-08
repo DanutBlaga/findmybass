@@ -11,6 +11,7 @@ use AppBundle\Entity\Users;
 use AppBundle\Form\Type\BassEditType;
 use AppBundle\Form\Type\BassType;
 use AppBundle\Utils\StringNormalizer;
+use AppBundle\Utils\ThumbsArray;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -198,25 +199,16 @@ class BassController extends Controller {
                 $em->persist($userRating);
                 $em->flush();
 
-                // TODO create static util function that generates success array
-                $array = [
-                    "error" => 0,
-                    "newRating" => $rating
-                ];
+                $array = ThumbsArray::getJSONArray(true, $rating);
             }
             else {
-                $array = [
-                    "error" => 1,
-                    "errorMessage" => "You have already given a thumbsUp."
-                ];
+                $array = ThumbsArray::getJSONArray(false, "You have already given a thumbsUp.");
             }
         }
         else {
-            $array = [
-                "error" => 1,
-                "errorMessage" => "You must be logged in to give a thumbsUp."
-            ];
+            $array = ThumbsArray::getJSONArray(false, "You must be logged in to give a thumbsUp.");
         }
+
         return new JsonResponse($array);
     }
 
@@ -256,25 +248,17 @@ class BassController extends Controller {
                 $em->persist($userRating);
                 $em->flush();
 
-                $array = [
-                    "error" => 0,
-                    "newRating" => $rating
-                ];
+                $array = ThumbsArray::getJSONArray(true, $rating);
             }
 
             else {
-                $array = [
-                    "error" => 1,
-                    "errorMessage" => "You have already given a thumbsDown."
-                ];
+                $array = ThumbsArray::getJSONArray(false, "You have already given a thumbsDown.");
             }
         }
         else {
-            $array = [
-                "error" => 1,
-                "errorMessage" => "You need to be logged in to perform this action."
-            ];
+            $array = ThumbsArray::getJSONArray(false, "You need to be logged in to give a thumbsDown.");
         }
+
         return new JsonResponse($array);
     }
 }
