@@ -124,15 +124,15 @@
 
                 var bassRatingSpan = $(this).closest('td').find('span.bassRating');
                 var thumbsUpIcon = $(this);
-                var thumbsDownIcon = $("i.fa-thumbs-down");
 
                 postFunction(true, $(this), function (data, status) {
                     if (data['error'] === 0) {
                         bassRatingSpan.text(data['newRating']);
                         thumbsUpIcon.addClass("hasThumbs");
 
-                        if (thumbsDownIcon.hasClass("hasThumbs")) {
-                            thumbsDownIcon.removeClass("hasThumbs");
+                        //var thumbsDownIcon = $(this).next('i.fa-thumbs-down');
+                        if ($(this).next('i.fa-thumbs-down').hasClass("hasThumbs")) {
+                            $(this).next('i.fa-thumbs-down').removeClass("hasThumbs");
                         }
                     }
                     else {
@@ -151,6 +151,11 @@
                     if (data['error'] === 0) {
                         bassRatingSpan.text(data['newRating']);
                         thumbsDownIcon.addClass("hasThumbs");
+
+                        var thumbsUpIcon = $(this).next('i.fa-thumbs-up');
+                        if (thumbsUpIcon.hasClass("hasThumbs")) {
+                            thumbsUpIcon.removeClass("hasThumbs");
+                        }
                     }
                     else {
                         $("div#errorAlert").text(data['errorMessage']);

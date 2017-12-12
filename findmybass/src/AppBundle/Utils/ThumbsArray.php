@@ -11,18 +11,22 @@ namespace AppBundle\Utils;
 
 class ThumbsArray
 {
+    /**
+     * @param $type bool if rating was correctly set
+     * @param $message mixed
+     * @return array
+     */
     public function getJSONArray($type, $message) {
-        if (true == $type) {
+        if ($type) {
             $array = [
                 "error" => 0, "newRating" => $message
             ];
-            return $array;
         }
         else {
             $array = [
                 "error" => 1, "errorMessage" => $message
             ];
-            return $array;
         }
+        return $array;
     }
 }

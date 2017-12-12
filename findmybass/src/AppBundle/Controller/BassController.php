@@ -182,7 +182,8 @@ class BassController extends Controller {
                 'userID' => $user->getId(),
                 'bassID' => $bass->getId()
             ]);
-            if (null == $userRating) {
+
+            if (null === $userRating) {
                 $rating = $bass->getRating();
                 $rating += 1;
 
@@ -202,7 +203,19 @@ class BassController extends Controller {
                 $array = ThumbsArray::getJSONArray(true, $rating);
             }
             else {
-                $array = ThumbsArray::getJSONArray(false, "You have already given a thumbsUp.");
+                if (true === $userRating->getIsThumbsUp())
+                    $array = ThumbsArray::getJSONArray(false, "You have already given a thumbsUp.");
+                else {
+
+                    $bass->setRating($bass->getRating() + 2);
+                    $userRating->setIsThumbsUp(true);
+
+                    $em->persist($userRating);
+                    $em->persist($bass);
+                    $em->flush();
+
+                    $array = ThumbsArray::getJSONArray(true, $bass->getRating());
+                }
             }
         }
         else {
@@ -252,7 +265,18 @@ class BassController extends Controller {
             }
 
             else {
-                $array = ThumbsArray::getJSONArray(false, "You have already given a thumbsDown.");
+                if (false === $userRating->getIsThumbsUp())
+                    $array = ThumbsArray::getJSONArray(false, "You have already given a thumbsDown.");
+                else {
+                    $bass->setRating($bass->getRating() - 2);
+                    $userRating->setIsThumbsUp(false);
+
+                    $em->persist($userRating);
+                    $em->persist($bass);
+                    $em->flush();
+
+                    $array = ThumbsArray::getJSONArray(true, $bass->getRating());
+                }
             }
         }
         else {
