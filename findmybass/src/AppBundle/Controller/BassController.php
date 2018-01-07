@@ -10,11 +10,13 @@ use AppBundle\Entity\UserRatings;
 use AppBundle\Entity\Users;
 use AppBundle\Form\Type\BassEditType;
 use AppBundle\Form\Type\BassType;
+use AppBundle\Security\BassVoter;
 use AppBundle\Utils\StringNormalizer;
 use AppBundle\Utils\ThumbsArray;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,9 +41,14 @@ class BassController extends Controller {
      */
     public function bassEditAction($id, Request $request) {
 
+
         $bass = $this->getDoctrine()
             ->getRepository('AppBundle:Bass')
             ->find($id);
+
+        if (!$this->isGranted(BassVoter::EDIT, $bass)) {
+            throw new LogicException('You cannot perform this action.');
+        }
 
         $bass->setYear($bass->getYear());
         $bass->setManufacturingPlace($bass->getManufacturingPlace());
@@ -84,6 +91,10 @@ class BassController extends Controller {
     public function bassDeleteAction($id) {
         $em = $this->getDoctrine()->getManager();
         $bass = $em->getRepository('AppBundle:Bass')->find($id);
+
+        if (!$this->isGranted(BassVoter::DELETE, $bass)) {
+            throw new LogicException('You cannot perform this action.');
+        }
 
         $em->remove($bass);
         $em->flush();

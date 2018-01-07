@@ -33,3 +33,7 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    app.bass.voter:
+        class: AppBundle\Security\BassVoter
+        tags:
+            - { name: security.voter }
