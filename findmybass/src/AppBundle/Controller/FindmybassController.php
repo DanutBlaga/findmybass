@@ -15,11 +15,14 @@ use AppBundle\Entity\Model;
 use AppBundle\Entity\Users;
 use AppBundle\Form\Type\BassType;
 use AppBundle\Form\Type\RegisterType;
+use AppBundle\Repository\BassRepository;
 use AppBundle\Utils\PasswordUtils;
 use AppBundle\Utils\StringNormalizer;
 use AppBundle\Utils\UserTypes;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -151,5 +154,33 @@ class FindmybassController extends Controller
         return $this->render("findmybass/userregister.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/search/{query}", name="searchQuery")
+     * @Method({"POST"})
+     */
+    public function searchAction($query) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var BassRepository $bassRepo */
+        $bassRepo = $em->getRepository(Bass::class);
+
+        /** @var Bass[] $basses */
+        $basses = $bassRepo->searchBassesByQuery($query);
+
+        $responseArray = [];
+        foreach ($basses as $bass) {
+            $make = $bass->getMake()->getName();
+            $model = $bass->getModel()->getName();
+            $year = $bass->getYear();
+            $niceName = sprintf("%s %s, %d", $make, $model, $year);
+
+            $responseArray[$niceName] = sprintf("/bass/details/%d", $bass->getId());
+        }
+
+
+        return new JsonResponse($responseArray);
     }
 }

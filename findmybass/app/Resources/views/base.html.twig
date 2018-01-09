@@ -68,8 +68,12 @@
             {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <div class="dropdown">
+                <input class="form-control mr-sm-2 bass-search-field" type="text" placeholder="Search" aria-label="Search">
+                    <div class="dropdown-content">
+                    </div>
+            </div>
+            {#<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
         </form>
     </div>
 </nav>
@@ -101,8 +105,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
         integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
         crossorigin="anonymous"></script>
+<script src="{{ asset('javascript/search.js') }}"></script>
 
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+{% endblock %}
 
 </body>
 </html>

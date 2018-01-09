@@ -1,21 +1,50 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a class="btn btn-default" href="/">Back to Main Page</a>
-    <hr>
-    <h2 class="page-header">
-        {{ bass.year }}
-        {{ bass.make.name }}
-        {{ bass.model.name }}
-    </h2>
 
-    <ul class="list-group">
-        <li class="list-group-item">Manufacturing Location: {{ bass.manufacturingPlace }}</li>
-        <li class="list-group-item">Year of Manufacturing: {{ bass.year }}</li>
-        <li class="list-group-item">Current Location: {{ bass.currentLocation }}</li>
-    </ul>
-    <hr>
-    <p>
-        {{ bass.description }}
-    </p>
+    {% if bass.picturePath %}
+        {% set url = 'basses/' ~ bass.picturePath %}
+    {% else %}
+        {% set url = 'logo/logo_full.png' %}
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="column-md-12">
+                <h2 class="page-header">
+                    {{ bass.year }}
+                    {{ bass.make.name }}
+                    {{ bass.model.name }}
+                </h2>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="column-sm-4">
+                <img src="{{ asset('images/') ~ url}}" class="thumbnail img-responsive">
+            </div>
+            <div class="column-sm-8">
+                <ul class="list-group">
+                    <li class="list-group-item">Manufacturing Location: {{ bass.manufacturingPlace }}</li>
+                    <li class="list-group-item">Year of Manufacturing: {{ bass.year }}</li>
+                    <li class="list-group-item">Current Location: {{ bass.currentLocation }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="column-md-12">
+                <p>
+                    {{ bass.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <a class="btn btn-default" href="/">Back to Main Page</a>
+
 {% endblock %}

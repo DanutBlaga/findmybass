@@ -21,4 +21,12 @@ class StringNormalizer
 
         return $normalizedName;
     }
+
+    public static function normalizeArray(array $array) {
+        $name = implode("", $array);
+
+        return self::normalizeName($name);
+    }
+
+
 }

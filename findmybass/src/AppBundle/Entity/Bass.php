@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Utils\StringNormalizer;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Entity\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -9,7 +10,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * Bass
  *
- * @ORM\Table(name="bass")
+ * @ORM\Table(name="bass", indexes={@ORM\Index(name="idx_normalizedData", columns={"normalizedData"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BassRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
@@ -146,6 +147,14 @@ class Bass
     private $isThumbsDown = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="NormalizedData", type="string", length=255)
+     */
+
+    private $normalizedData;
+
+    /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
@@ -153,6 +162,13 @@ class Bass
         $this->editDate = new \DateTime('now');
         if($this->creationDate == null) {
             $this->creationDate = new \DateTime('now');
+        }
+        if($this->normalizedData == null) {
+            $this->normalizedData = StringNormalizer::normalizeArray([
+                $this->make->getName(),
+                $this->model->getName(),
+                $this->getYear()
+                ]);
         }
     }
 
